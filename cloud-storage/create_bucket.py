@@ -3,12 +3,10 @@ from google.cloud import storage
 
 
 def main():
-    # Crear el parser de argumentos
     parser = argparse.ArgumentParser(
         description="Create a GCP bucket."
     )
 
-    # Argumentos por línea de comandos
     parser.add_argument(
         "bucket_name",
         type=str,
@@ -19,18 +17,20 @@ def main():
 
     bucket_name = args.bucket_name
 
-    # Crear cliente de Storage
+    print(f"Bucket name received: {bucket_name}")
+
     storage_client = storage.Client()
 
-    # Crear el bucket
-    bucket = storage_client.create_bucket(bucket_name)
-
-    # Configurar la clase de almacenamiento
+    bucket = storage_client.bucket(bucket_name)
     bucket.storage_class = "STANDARD"
 
+    new_bucket = storage_client.create_bucket(
+        bucket, location="US-CENTRAL1"
+    )
+
     print(
-        f"Bucket {bucket.name} created in {bucket.location} "
-        f"with class {bucket.storage_class}"
+        f"Bucket {new_bucket.name} created in "
+        f"{new_bucket.location} with class {new_bucket.storage_class}"
     )
 
 
